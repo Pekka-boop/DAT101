@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <title>Sonic Example</title>
+    <style>
+      .prevent-select {
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+      }
+    </style>
+  </head>
+  <body class="prevent-select">
+    <canvas id="cvs" style="background-color: antiquewhite" width="1024" height="512"></canvas>
+  </body>
+  <script type="module" defer>
+    //Import libraries
+    import {TSpriteCanvas} from "libSprite";
+//How to put and animate sprites in HTML using Java script
+    //main part of just setting the canvas and the document up
+    
+    //Global variables 
+    const cvs = document.getElementById("cvs"); //Get element allows developers to select and access specific HTML elements in the Document Object Model (DOM) of a web page
+    const ctx = cvs.getContext ("2d"); //does it so we can paint in canvas. Get context = retrieve the drawing context of an HTML
+    const spcvs = new TSpriteCanvas(cvs);
+
+    //Functions
+    function sheetLoadeded(){
+      console.log("Sheet loaded");
+    }
+    
+    //Main application 
+    spcvs.loadSpriteImage("sonic_sprite_sheet.png", sheetLoaded);
+    
+    //getting the actual sprite
+
+    const sonicPath = "sonic_sprite_sheet.png"; //making the path and importing sonic into JS so that it can recognize the file
+    const sonicSheet = new Image(); //Image is a type of class. Blueprint of an image. It is putting the sheet into the sonic Sheet and makes it a picture. Tells the code it actually is done loading.
+    const Sonic2 = {x: 0, y: 127, width: 102, height: 121, count: 9};
+    let frameNumber = 0;
+    let posX = 0;
+    let hero = Sonic2;
+
+    function animate () {
+      //
+      ctx.clearRect(0,0, cvs.width, cvs.height);
+      const dx = 0, dy = 100, dw = Sonic2.width, dh = Sonic2.height//destination x and y, width and height of the image
+      const sx = frameNumber  * Sonic2.width, sy = Sonic2.y, sw = Sonic2.width, sh = Sonic2.height; //source
+      ctx.drawImage(sonicSheet, sx, sy, sw, sh, dx + posX, dy, dw, dy);
+     
+    
+      if (posX < cvs.width - Sonic2.width) {
+         frameNumber++;
+           if (frameNumber >= Sonic2.count) {
+          frameNumber = 0;
+      }
+
+        posX+=15;
+        console.log(posX);
+      } else {
+        posX = cvs.width - Sonic2.width //makes it so that we know 100% the whole model is withing borders and his shoes dont get chopped off
+      }
+
+
+    }
+
+    function sonicSheetLoader () {
+      //
+      console.log ("Sprite Sheet Loaded!");
+      setInterval (animate, 100);
+  
+    }
+    sonicSheet.addEventListener("load", sonicSheetLoader) //
+    sonicSheet.src = sonicPath; //
+  </script>
+</html>
